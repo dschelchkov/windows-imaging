@@ -1,0 +1,91 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+	    [ "modifyvm", "{{.Name}}", "--natpf1", "guest_winrm,tcp,,55985,,5985" ],
+		[ "modifyvm", "{{.Name}}", "--memory", "4096" ],
+        [ "modifyvm", "{{.Name}}", "--vram", "48" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "2" ],
+		[ "storageattach", "{{.Name}}", "--storagectl", "IDE Controller", "--port", "1", "--device", "0", "--type", "dvddrive", "--medium", "stage_files/VirtIO/virtio-win.iso"]
+      ],
+      "guest_additions_mode": "{{ user `guest_additions_mode` }}",
+      "guest_os_type": "Windows2012_64",
+      "headless": "{{ user `headless` }}",
+      "iso_url": "{{ user `iso_url` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "md5",
+      "communicator": "winrm",
+      "winrm_username": "Administrator",
+      "winrm_password": "vagrant",
+      "winrm_timeout": "12h",
+      "winrm_port": 55985,
+	  "shutdown_command": "A:/scripts/PackerShutdown.bat",
+      "floppy_files": [
+        "answer_files/Autounattend.xml",
+        "answer_files/postunattend.xml"
+      ],
+      "floppy_dirs": [
+	    "scripts"
+	  ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "powershell",
+      "scripts": [
+		"scripts/Enable-RDP.ps1",
+		"scripts/Delete-Pagefile.ps1",
+		"scripts/Configure-WSUS.ps1"
+	  ]
+    },
+    {
+      "type": "powershell",
+      "script": "scripts/windows-updates.ps1",
+      "elevated_user": "Administrator",
+      "elevated_password": "vagrant"
+    },	
+    {
+      "type": "windows-restart",
+      "restart_timeout": "2h"
+    },    
+    {
+      "type": "powershell",
+	  "pause_before": "10m",
+      "script": "scripts/windows-updates.ps1",
+      "elevated_user": "Administrator",
+      "elevated_password": "vagrant"
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "2h"
+    },  	
+	{
+      "type": "powershell",
+      "inline": "if ('{{ user `install_cygwin` }}' -eq 'true') {A:/scripts/Install-Cygwin.ps1 -remote_path \\\\vboxsrv\\stagefiles}"
+    },
+	{
+      "type": "powershell",
+      "inline": "A:/scripts/Install-Cloudbase.ps1 -remote_path \\\\vboxsrv\\stagefiles"
+    },
+	{
+      "type": "powershell",
+      "scripts": [
+	    "scripts/cleanup.ps1",
+		"scripts/Add-Pagefile.ps1"
+	  ]
+    }
+  ],  
+  "variables": {
+    "username": "Administrator",
+	"pasword": "vagrant",
+	"install_cygwin": "false",
+	"guest_additions_mode": "disable",
+    "headless": "true",
+    "iso_checksum": "<%= @iso_checksum %>",
+    "iso_checksum_type":"md5",
+    "iso_url": "<%= @iso_url %>",
+	"virtio_dir": "<%= @virtio_dir %>",
+	"stagefiles": ""
+  }
+}

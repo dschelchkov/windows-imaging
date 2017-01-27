@@ -1,0 +1,46 @@
+{
+  "variables": {
+	"guest_additions_mode": "disable",
+    "headless": "<%= @headless %>",
+	"winrm_port": "<%= @winrm_port %>",
+	"short_name": "<%= @short_name %>"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-ovf",
+      "source_path": "/output-virtualbox-iso/{{ user `short_name` }}_base.ovf",
+	  "vm_name": "{{ user `short_name` }}_upd1",
+      "guest_additions_mode": "{{ user `guest_additions_mode` }}",
+      "headless": "{{ user `headless` }}",
+      "communicator": "winrm",
+      "winrm_username": "Administrator",
+      "winrm_password": "vagrant",
+      "winrm_timeout": "12h",
+      "winrm_port": {{ user `winrm_port` }},
+	  "shutdown_command": "shutdown /s /t 10 /f /d p:4:1",
+      "floppy_dirs": [ "scripts" ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "powershell",
+      "scripts": [
+	    "scripts/Configure-WSUS.ps1"
+		"scripts/windows-updatesCritical.ps1"
+		],
+      "elevated_user": "Administrator",
+      "elevated_password": "vagrant"
+    },	
+    {
+      "type": "windows-restart",
+      "restart_timeout": "2h"
+    },    
+    {
+      "type": "powershell",
+	  "pause_before": "10m",
+      "script": "scripts/windows-updatesCritical.ps1",
+      "elevated_user": "Administrator",
+      "elevated_password": "vagrant"
+    }
+  ]  
+}

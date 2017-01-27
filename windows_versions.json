@@ -1,6 +1,5 @@
 {
   "general": {
-    "iso_dir": "C:/src/share/imaging/ISO",
 	"working_dir": "C:/src/share/imaging/windows-imaging",
 	"virtio_iso": "C:/src/share/imaging/mypacker/stage_files/VirtIO/virtio-win.iso",
 	"winrm_port": "65985",
@@ -16,14 +15,14 @@
     "Server_2016_DataCenter": {
       "image_name": "Windows Server 2016 SERVERDATACENTER",
 	  "iso_checksum": "311afcb8b9be9abdba7dd135f844ec2d",
-	  "iso_name": "SW_DVD9_Win_Svr_STD_Core_and_DataCtr_Core_2016_64Bit_English_-2_MLF_X21-22843.ISO",
+	  "image_iso": "C:/src/share/imaging/ISO/SW_DVD9_Win_Svr_STD_Core_and_DataCtr_Core_2016_64Bit_English_-2_MLF_X21-22843.ISO",
 	  "virtio_dir": "2k16",
 	  "short_name": "WinSrv2016_DC_x64"
       },
     "Server_2012_R2_DataCenter": {
       "image_name": "Windows Server 2012 R2 SERVERDATACENTER",
 	  "iso_checksum": "9A00DEFAB26A046045D939086DF78460",
-	  "iso_name": "SW_DVD9_Windows_Svr_Std_and_DataCtr_2012_R2_64Bit_English_-4_MLF_X19-82891.ISO",
+	  "image_iso": "C:/src/share/imaging/ISO/SW_DVD9_Windows_Svr_Std_and_DataCtr_2012_R2_64Bit_English_-4_MLF_X19-82891.ISO",
 	  "virtio_dir": "2k12R2",
 	  "short_name": "WinSrv2012R2_DC_x64"
       }

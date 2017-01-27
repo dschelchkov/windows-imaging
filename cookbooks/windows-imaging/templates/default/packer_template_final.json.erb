@@ -1,0 +1,50 @@
+{
+  "variables": {
+	"install_cygwin": "false",
+	"guest_additions_mode": "disable",
+    "headless": "<%= @headless %>",
+	"winrm_port": "<%= @winrm_port %>",
+	"short_name": "<%= @short_name %>"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-ovf",
+      "source_path": "/output-virtualbox-ovf/{{ user `short_name` }}_upd2.ovf",
+	  "vm_name": "{{ user `short_name` }}_final",
+      "guest_additions_mode": "{{ user `guest_additions_mode` }}",
+      "headless": "{{ user `headless` }}",
+      "communicator": "winrm",
+      "winrm_username": "Administrator",
+      "winrm_password": "vagrant",
+      "winrm_timeout": "12h",
+      "winrm_port": {{ user `winrm_port` }},
+	  "shutdown_command": "A:/scripts/PackerShutdown.bat",
+      "floppy_files": [ "answer_files/postunattend.xml" ],
+      "floppy_dirs": [ "scripts" ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "powershell",
+      "scripts": [
+		"scripts/Enable-RDP.ps1",
+		"scripts/Delete-Pagefile.ps1"
+	  ]
+    },
+	{
+      "type": "powershell",
+      "inline": "if ('{{ user `install_cygwin` }}' -eq 'true') {A:/scripts/Install-Cygwin.ps1 -remote_path \\\\vboxsrv\\stagefiles}"
+    },
+	{
+      "type": "powershell",
+      "inline": "A:/scripts/Install-Cloudbase.ps1 -remote_path \\\\vboxsrv\\stagefiles"
+    },
+	{
+      "type": "powershell",
+      "scripts": [
+	    "scripts/cleanup.ps1",
+		"scripts/Add-Pagefile.ps1"
+	  ]
+    }
+  ]  
+}

@@ -1,0 +1,40 @@
+{
+  "variables": {
+	"guest_additions_mode": "disable",
+    "headless": "<%= @headless %>",
+	"winrm_port": "<%= @winrm_port %>",
+	"short_name": "<%= @short_name %>",
+	
+    "iso_checksum": "<%= @iso_checksum %>",
+    "iso_checksum_type":"md5",
+    "iso_url": "<%= @iso_url %>",
+	"virtio_iso": "<%= @virtio_iso %>"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+	  "vm_name": "{{ user `short_name` }}_base",
+      "vboxmanage": [
+	    [ "modifyvm", "{{.Name}}", "--natpf1", "guest_winrm,tcp,,{{ user `winrm_port` }},,5985" ],
+		[ "modifyvm", "{{.Name}}", "--memory", "4096" ],
+        [ "modifyvm", "{{.Name}}", "--vram", "48" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "2" ],
+		[ "storageattach", "{{.Name}}", "--storagectl", "IDE Controller", "--port", "1", "--device", "0", "--type", "dvddrive", "--medium", "{{ user `virtio_iso` }}"]
+      ],
+      "guest_additions_mode": "{{ user `guest_additions_mode` }}",
+      "guest_os_type": "Windows2012_64",
+      "headless": "{{ user `headless` }}",
+      "iso_url": "{{ user `iso_url` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "md5",
+      "communicator": "winrm",
+      "winrm_username": "Administrator",
+      "winrm_password": "vagrant",
+      "winrm_timeout": "12h",
+      "winrm_port": {{ user `winrm_port` }},
+	  "shutdown_command": "shutdown /s /t 10 /f /d p:4:1",
+      "floppy_files": [ "answer_files/Autounattend.xml" ],
+      "floppy_dirs": [ "scripts" ]
+    }
+  ]
+}
