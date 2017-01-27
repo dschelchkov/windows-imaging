@@ -2,9 +2,11 @@
 Automation of building windows images
 
 Requires:
-  packer
-  ChefDK
-  VirtualBox
+  packer - https://www.packer.io/downloads.html
+  ChefDK - https://downloads.chef.io/chefdk
+  VirtualBox - https://www.virtualbox.org/wiki/Downloads
+  
+Optional: qemu-img
 
 Before running please set up attributes in windows_versions.json general node.
 Also update image_iso and iso_checksum attributes in versions node.
