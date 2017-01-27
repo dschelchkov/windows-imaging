@@ -1,0 +1,24 @@
+Gemfile.lock
+.project
+.idea
+.chef
+.arcconfig
+**/.DS_Store
+.rspec
+.DS_Store
+
+# Berkshelf
+.vagrant
+/cookbooks
+Berksfile.lock
+
+# Bundler
+bin/*
+.bundle/*
+
+.kitchen/
+.kitchen.local.yml
+
+nodes/
+packer_templates/
+answer_files/
