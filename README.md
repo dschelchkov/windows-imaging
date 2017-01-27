@@ -12,3 +12,5 @@ Currently these 2 versions are supported - Windows Server 2012 R2 Datacenter and
 You can add your own versions to windows_versions.json.
 
 Then to run a build execute on of the .ps1 files in the root folder of the project. Or create your own shell file.
+
+TBD
