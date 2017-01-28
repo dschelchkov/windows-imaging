@@ -3,7 +3,6 @@
 	"install_cygwin": "false",
 	"guest_additions_mode": "disable",
     "headless": "<%= @headless %>",
-	"winrm_port": "<%= @winrm_port %>",
 	"short_name": "<%= @short_name %>"
   },
   "builders": [
@@ -17,7 +16,7 @@
       "winrm_username": "Administrator",
       "winrm_password": "vagrant",
       "winrm_timeout": "12h",
-      "winrm_port": {{ user `winrm_port` }},
+      "winrm_port": <%= @winrm_port %>,
 	  "shutdown_command": "A:/scripts/PackerShutdown.bat",
       "floppy_files": [ "answer_files/postunattend.xml" ],
       "floppy_dirs": [ "scripts" ]
