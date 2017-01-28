@@ -21,3 +21,6 @@ bin/*
 nodes/
 packer_templates/
 answer_files/
+output-virtualbox-iso/
+output-virtualbox-ovf/
+windows_versions.json

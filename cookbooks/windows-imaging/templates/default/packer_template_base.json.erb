@@ -2,7 +2,6 @@
   "variables": {
 	"guest_additions_mode": "disable",
     "headless": "<%= @headless %>",
-	"winrm_port": "<%= @winrm_port %>",
 	"short_name": "<%= @short_name %>",
 	
     "iso_checksum": "<%= @iso_checksum %>",
@@ -15,7 +14,7 @@
       "type": "virtualbox-iso",
 	  "vm_name": "{{ user `short_name` }}_base",
       "vboxmanage": [
-	    [ "modifyvm", "{{.Name}}", "--natpf1", "guest_winrm,tcp,,{{ user `winrm_port` }},,5985" ],
+	    [ "modifyvm", "{{.Name}}", "--natpf1", "guest_winrm,tcp,,<%= @winrm_port %>,,5985" ],
 		[ "modifyvm", "{{.Name}}", "--memory", "4096" ],
         [ "modifyvm", "{{.Name}}", "--vram", "48" ],
         [ "modifyvm", "{{.Name}}", "--cpus", "2" ],
@@ -31,7 +30,7 @@
       "winrm_username": "Administrator",
       "winrm_password": "vagrant",
       "winrm_timeout": "12h",
-      "winrm_port": {{ user `winrm_port` }},
+      "winrm_port": <%= @winrm_port %>,
 	  "shutdown_command": "shutdown /s /t 10 /f /d p:4:1",
       "floppy_files": [ "answer_files/Autounattend.xml" ],
       "floppy_dirs": [ "scripts" ]
