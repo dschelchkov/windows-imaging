@@ -13,11 +13,11 @@
     {
       "type": "virtualbox-iso",
 	  "vm_name": "{{ user `short_name` }}_base",
+	  "output_directory": "output/base/",  
       "vboxmanage": [
-	    [ "modifyvm", "{{.Name}}", "--natpf1", "guest_winrm,tcp,,<%= @winrm_port %>,,5985" ],
 		[ "modifyvm", "{{.Name}}", "--memory", "4096" ],
         [ "modifyvm", "{{.Name}}", "--vram", "48" ],
-        [ "modifyvm", "{{.Name}}", "--cpus", "2" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "1" ],
 		[ "storageattach", "{{.Name}}", "--storagectl", "IDE Controller", "--port", "1", "--device", "0", "--type", "dvddrive", "--medium", "{{ user `virtio_iso` }}"]
       ],
       "guest_additions_mode": "{{ user `guest_additions_mode` }}",
@@ -30,7 +30,7 @@
       "winrm_username": "Administrator",
       "winrm_password": "vagrant",
       "winrm_timeout": "12h",
-      "winrm_port": <%= @winrm_port %>,
+      "winrm_port": 5985,
 	  "shutdown_command": "shutdown /s /t 10 /f /d p:4:1",
       "floppy_files": [ "answer_files/Autounattend.xml" ],
       "floppy_dirs": [ "scripts" ]

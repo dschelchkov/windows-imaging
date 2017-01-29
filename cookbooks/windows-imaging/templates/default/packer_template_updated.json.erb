@@ -7,7 +7,8 @@
   "builders": [
     {
       "type": "virtualbox-ovf",
-      "source_path": "/output-virtualbox-ovf/{{ user `short_name` }}_upd1.ovf",
+      "source_path": "output/base/{{ user `short_name` }}_base.ovf",
+	  "output_directory": "output/updated/",
 	  "vm_name": "{{ user `short_name` }}_updated",
       "guest_additions_mode": "{{ user `guest_additions_mode` }}",
       "headless": "{{ user `headless` }}",
@@ -15,7 +16,7 @@
       "winrm_username": "Administrator",
       "winrm_password": "vagrant",
       "winrm_timeout": "12h",
-      "winrm_port": <%= @winrm_port %>,
+      "winrm_port": 5985,
 	  "shutdown_command": "shutdown /s /t 10 /f /d p:4:1",
       "floppy_dirs": [ "scripts" ]
     }
@@ -23,7 +24,10 @@
   "provisioners": [
     {
       "type": "powershell",
-      "script": "scripts/windows-updates.ps1",
+      "scripts": [
+	    "scripts/Configure-WSUS.ps1",
+		"scripts/windows-updates.ps1"
+		],
       "elevated_user": "Administrator",
       "elevated_password": "vagrant"
     },	
@@ -33,7 +37,7 @@
     },    
     {
       "type": "powershell",
-	  "pause_before": "5m",
+	  "pause_before": "10m",
       "script": "scripts/windows-updates.ps1",
       "elevated_user": "Administrator",
       "elevated_password": "vagrant"
