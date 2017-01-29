@@ -15,6 +15,6 @@ You can add your own versions to windows_versions.json.
 
 Then to run a build execute on of the .ps1 files in the root folder of the project. Or create your own shell file.
 _All files will build an image in 3 steps - base, updated (patches installed) and final (the rest of the changes added). This approach is useful when something happens in the middle of the build, so when resuming you can skip steps that finished correctly.
-_Full fils will build an image in one step.
+_Full files will build an image in one step.
 
 TBD
