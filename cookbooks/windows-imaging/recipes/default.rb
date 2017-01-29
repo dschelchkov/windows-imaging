@@ -38,25 +38,25 @@ end
 directory "#{working_dir}/packer_templates" do
 end
 
-template "#{working_dir}/packer_templates/packer_template_base.json" do
-  source 'packer_template_base.json.erb'
-  variables( 
-    :headless => general_node["headless"],
-	:winrm_port => general_node["winrm_port"],
-	:short_name => version_node["short_name"],
-	
-	:iso_checksum => version_node["iso_checksum"],
-	:iso_url => version_node["image_iso"],
-	:virtio_iso => general_node["virtio_iso"],
-  )
-end
-
-["upd1", "upd2", "final"].each do |a|
+["base", "full"].each do |a|
   template "#{working_dir}/packer_templates/packer_template_#{a}.json" do
     source "packer_template_#{a}.json.erb"
     variables( 
       :headless => general_node["headless"],
-	  :winrm_port => general_node["winrm_port"],
+	  :short_name => version_node["short_name"],
+	
+	  :iso_checksum => version_node["iso_checksum"],
+	  :iso_url => version_node["image_iso"],
+	  :virtio_iso => general_node["virtio_iso"],
+    )
+  end	
+end
+
+["updated", "final"].each do |a|
+  template "#{working_dir}/packer_templates/packer_template_#{a}.json" do
+    source "packer_template_#{a}.json.erb"
+    variables( 
+      :headless => general_node["headless"],
 	  :short_name => version_node["short_name"]
     )
   end

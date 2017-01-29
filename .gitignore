@@ -21,6 +21,5 @@ bin/*
 nodes/
 packer_templates/
 answer_files/
-output-virtualbox-iso/
-output-virtualbox-ovf/
+output*/
 windows_versions.json

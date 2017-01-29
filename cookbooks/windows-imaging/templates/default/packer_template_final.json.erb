@@ -8,7 +8,8 @@
   "builders": [
     {
       "type": "virtualbox-ovf",
-      "source_path": "/output-virtualbox-ovf/{{ user `short_name` }}_upd2.ovf",
+      "source_path": "output/updated/{{ user `short_name` }}_updated.ovf",
+	  "output_directory": "output/final/",
 	  "vm_name": "{{ user `short_name` }}_final",
       "guest_additions_mode": "{{ user `guest_additions_mode` }}",
       "headless": "{{ user `headless` }}",
@@ -16,7 +17,7 @@
       "winrm_username": "Administrator",
       "winrm_password": "vagrant",
       "winrm_timeout": "12h",
-      "winrm_port": <%= @winrm_port %>,
+      "winrm_port": 5985,
 	  "shutdown_command": "A:/scripts/PackerShutdown.bat",
       "floppy_files": [ "answer_files/postunattend.xml" ],
       "floppy_dirs": [ "scripts" ]
@@ -24,6 +25,26 @@
   ],
   "provisioners": [
     {
+      "type": "powershell",
+      "scripts": [
+	    "scripts/Configure-WSUS.ps1",
+		"scripts/windows-updates.ps1"
+		],
+      "elevated_user": "Administrator",
+      "elevated_password": "vagrant"
+    },	
+    {
+      "type": "windows-restart",
+      "restart_timeout": "2h"
+    },    
+    {
+      "type": "powershell",
+	  "pause_before": "5m",
+      "script": "scripts/windows-updates.ps1",
+      "elevated_user": "Administrator",
+      "elevated_password": "vagrant"
+    },
+   {
       "type": "powershell",
       "scripts": [
 		"scripts/Enable-RDP.ps1",

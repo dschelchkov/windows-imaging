@@ -1,13 +1,24 @@
 {
+  "variables": {
+	"install_cygwin": "false",
+	"guest_additions_mode": "disable",
+    "headless": "<%= @headless %>",
+	"short_name": "<%= @short_name %>",
+    "iso_checksum": "<%= @iso_checksum %>",
+    "iso_checksum_type":"md5",
+    "iso_url": "<%= @iso_url %>",
+	"virtio_dir": "<%= @virtio_dir %>",
+	"stagefiles": ""
+  },
   "builders": [
     {
       "type": "virtualbox-iso",
+	  "vm_name": "{{ user `short_name` }}_full",
       "vboxmanage": [
-	    [ "modifyvm", "{{.Name}}", "--natpf1", "guest_winrm,tcp,,55985,,5985" ],
 		[ "modifyvm", "{{.Name}}", "--memory", "4096" ],
         [ "modifyvm", "{{.Name}}", "--vram", "48" ],
-        [ "modifyvm", "{{.Name}}", "--cpus", "2" ],
-		[ "storageattach", "{{.Name}}", "--storagectl", "IDE Controller", "--port", "1", "--device", "0", "--type", "dvddrive", "--medium", "stage_files/VirtIO/virtio-win.iso"]
+        [ "modifyvm", "{{.Name}}", "--cpus", "1" ],
+		[ "storageattach", "{{.Name}}", "--storagectl", "IDE Controller", "--port", "1", "--device", "0", "--type", "dvddrive", "--medium", "{{ user `virtio_iso` }}"]
       ],
       "guest_additions_mode": "{{ user `guest_additions_mode` }}",
       "guest_os_type": "Windows2012_64",
@@ -19,15 +30,10 @@
       "winrm_username": "Administrator",
       "winrm_password": "vagrant",
       "winrm_timeout": "12h",
-      "winrm_port": 55985,
-	  "shutdown_command": "A:/scripts/PackerShutdown.bat",
-      "floppy_files": [
-        "answer_files/Autounattend.xml",
-        "answer_files/postunattend.xml"
-      ],
-      "floppy_dirs": [
-	    "scripts"
-	  ]
+      "winrm_port": 5985,
+	  "shutdown_command": "shutdown /s /t 10 /f /d p:4:1",
+      "floppy_files": [ "answer_files/Autounattend.xml" ],
+      "floppy_dirs": [ "scripts" ]
     }
   ],
   "provisioners": [
@@ -75,17 +81,5 @@
 		"scripts/Add-Pagefile.ps1"
 	  ]
     }
-  ],  
-  "variables": {
-    "username": "Administrator",
-	"pasword": "vagrant",
-	"install_cygwin": "false",
-	"guest_additions_mode": "disable",
-    "headless": "true",
-    "iso_checksum": "<%= @iso_checksum %>",
-    "iso_checksum_type":"md5",
-    "iso_url": "<%= @iso_url %>",
-	"virtio_dir": "<%= @virtio_dir %>",
-	"stagefiles": ""
-  }
+  ]  
 }
