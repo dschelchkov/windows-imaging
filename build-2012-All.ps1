@@ -1,5 +1,5 @@
 #$env:PACKER_LOG=1
-$env:image_version="Server_2012_DataCenter"
+$env:image_version="Server_2012_R2_DataCenter"
 
 #1. Construct autounattend.xml, postunattend.xml, packer_template_base.json
 chef-client --local-mode --runlist 'windows-imaging' -j windows_versions.json
