@@ -1,6 +1,6 @@
 {
   "variables": {
-	"install_cygwin": "false",
+	"install_cygwin": "<%= @cygwin %>",
 	"guest_additions_mode": "disable",
     "headless": "<%= @headless %>",
 	"short_name": "<%= @short_name %>"
@@ -13,6 +13,7 @@
 	  "vm_name": "{{ user `short_name` }}_final",
       "guest_additions_mode": "{{ user `guest_additions_mode` }}",
       "headless": "{{ user `headless` }}",
+	  "post_shutdown_delay": "5m",
       "communicator": "winrm",
       "winrm_username": "Administrator",
       "winrm_password": "vagrant",

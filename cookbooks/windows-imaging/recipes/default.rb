@@ -15,24 +15,24 @@ template "#{working_dir}/answer_files/autounattend.xml" do
   source 'autounattend.xml.erb'
   variables( 
     :image => version_node["image_name"],
-	:fullname => general_node["fullname"],
-	:organization => general_node["organization"],
-	:network_location => general_node["network_location"],
-	:protect_pc => general_node["protect_pc"],
-	:timezone => general_node["timezone"],
-	:virtio_dir => version_node["virtio_dir"]
-	)
+    :fullname => general_node["fullname"],
+    :organization => general_node["organization"],
+    :network_location => general_node["network_location"],
+    :protect_pc => general_node["protect_pc"],
+    :timezone => general_node["timezone"],
+    :virtio_dir => version_node["virtio_dir"]
+    )
 end
 
 template "#{working_dir}/answer_files/postunattend.xml" do
   source 'postunattend.xml.erb'
   variables( 
-	:fullname => general_node["fullname"],
-	:organization => general_node["organization"],
+    :fullname => general_node["fullname"],
+    :organization => general_node["organization"],
     :network_location => general_node["network_location"],
-	:protect_pc => general_node["protect_pc"],
-	:timezone => general_node["timezone"]
-	)
+    :protect_pc => general_node["protect_pc"],
+    :timezone => general_node["timezone"]
+    )
 end
 
 directory "#{working_dir}/packer_templates" do
@@ -43,13 +43,14 @@ end
     source "packer_template_#{a}.json.erb"
     variables( 
       :headless => general_node["headless"],
-	  :short_name => version_node["short_name"],
-	
-	  :iso_checksum => version_node["iso_checksum"],
-	  :iso_url => version_node["image_iso"],
-	  :virtio_iso => general_node["virtio_iso"],
+      :short_name => version_node["short_name"],
+      :cygwin => general_node["cygwin"],
+
+      :iso_checksum => version_node["iso_checksum"],
+      :iso_url => version_node["image_iso"],
+      :virtio_iso => general_node["virtio_iso"],
     )
-  end	
+  end
 end
 
 ["updated", "final"].each do |a|
@@ -57,7 +58,8 @@ end
     source "packer_template_#{a}.json.erb"
     variables( 
       :headless => general_node["headless"],
-	  :short_name => version_node["short_name"]
+      :short_name => version_node["short_name"],
+      :cygwin => general_node["cygwin"]
     )
   end
 end

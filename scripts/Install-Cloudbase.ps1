@@ -32,6 +32,9 @@ try {
 	
 	# 2. Set startup type to manual and change back to automatic in postunattend.xml
 	if ((Get-Service cloudbase-init).StartType -ne "Manual") {Set-Service cloudbase-init -startuptype "manual"}
+	
+	# 3. Replace config file
+	Copy-Item  -Path "A:\Scripts\cloudbase-init.conf" -Destination "C:\Program Files\Cloudbase Solutions\Cloudbase-Init\conf\cloudbase-init.conf" -force
 }
 catch 
 {
