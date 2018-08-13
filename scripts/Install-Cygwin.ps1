@@ -33,6 +33,9 @@ try {
 	# 2. Set up sshd service
 	if (!(Get-Service sshd -ErrorAction Ignore))
 	{
+		#this is to fix the error with creating cyg_server account
+		$env:LOGONSERVER = "\\" + $env:COMPUTERNAME
+
 		#generate a random password
 		[Reflection.Assembly]::LoadWithPartialName("System.Web")
 		$random_password = "Ez1!_"+[System.Web.Security.Membership]::GeneratePassword(20,0) 
